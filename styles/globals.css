@@ -24,3 +24,89 @@ a {
     background: black;
   }
 }
+
+.container{
+  width: 80%;
+  margin: auto;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.d-flex{
+  display: flex;
+}
+
+.justify-content-center{
+  justify-content: center;
+}
+
+.justify-content-between{
+  justify-content: space-between;
+}
+
+.align-items-center{
+  align-items: center;
+}
+
+.img-uploader{
+  position: relative;
+  width: 400px;
+  height: 400px;
+  background-color: #ccc;
+  border: 1px dashed #333;
+}
+
+.img-preview img{
+  width: 100%;
+  max-height: 348px;
+  vertical-align: top;
+}
+
+.img-preview .preview-controls{
+  min-height: 50px;
+  width: 100%;
+  background-color: cyan;
+}
+
+.img-preview i{
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.fa-trash{
+  color: #b62525;
+}
+
+.flex-column{
+  flex-direction: column;
+}
+
+.input-uploader, .img-preview{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.input-uploader input{
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.label-uploader{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  font-size: 2rem;
+}
+
+.d-none{
+  display: none;
+}
