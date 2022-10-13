@@ -1,11 +1,57 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Home: NextPage = () => {
-  const [isShowPreview, setIsShowPreview] = useState<boolean>(true);
+  // check if input file has value to show preview
+  const [isShowPreview, setIsShowPreview] = useState<boolean>(false);
+  // check if input file has value useEffect to get preview data
   const [selectedImg, setSelectedImg] = useState<File>();
+  // get preview data
   const [preview, setPreview] = useState<string>();
+
+  // to clear data of input or open dialog if user click edit icon
+  const inputImageRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedImg) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+        setIsShowPreview(true);
+      };
+      reader.readAsDataURL(selectedImg);
+    } else {
+      setPreview(undefined);
+    }
+  }, [selectedImg]);
+
+  // get file and set to selectedImg when input changed
+  const inputFileChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file && file.type.substr(0, 5) === "image") {
+      setSelectedImg(file);
+    } else {
+      setSelectedImg(undefined);
+    }
+  };
+
+  // Handling the edit icon
+  const editSelectedImg = () => {
+    setSelectedImg(undefined);
+    setPreview(undefined);
+    setIsShowPreview(false);
+    inputImageRef.current.value = "";
+    inputImageRef?.current.click();
+  };
+
+  // Handling the delete icon
+  const removeSelectedImg = () => {
+    setSelectedImg(undefined);
+    setPreview(undefined);
+    setIsShowPreview(false);
+    inputImageRef.current.value = "";
+  };
 
   return (
     <>
@@ -23,11 +69,19 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="container">
-        <h1 className="text-center">Image preview</h1>
+        <h1 className="text-center">
+          Image preview {isShowPreview ? "Show" : "Hide"}
+        </h1>
         <section className="d-flex justify-content-center align-items-center">
           <div className="img-uploader">
-            <div className={`input-uploader ${!isShowPreview ? "d-none" : ""}`}>
-              <input type="file" name="thumbnail" title="Thumbnail" />
+            <div className={`input-uploader ${!isShowPreview ? "" : "d-none"}`}>
+              <input
+                type="file"
+                name="thumbnail"
+                title="Thumbnail"
+                onChange={inputFileChange}
+                ref={inputImageRef}
+              />
               <div className="label-uploader d-flex flex-column justify-content-center align-items-center">
                 <label htmlFor="">Choose Image File</label>
                 <i className="fa-solid fa-cloud-arrow-up"></i>
@@ -35,15 +89,18 @@ const Home: NextPage = () => {
             </div>
             <div
               className={`img-preview d-flex flex-column justify-content-between align-items-center ${
-                isShowPreview ? "d-none" : ""
+                isShowPreview ? "" : "d-none"
               }`}
             >
               <div className="preview-img">
-                <img src="/images/img1.jpg" alt="Preview" />
+                <img src={preview} alt="Preview" />
               </div>
               <div className="preview-controls d-flex justify-content-center align-items-center">
-                <i className="fa-solid fa-edit"></i>
-                <i className="fa-solid fa-trash"></i>
+                <i className="fa-solid fa-edit" onClick={editSelectedImg}></i>
+                <i
+                  className="fa-solid fa-trash"
+                  onClick={removeSelectedImg}
+                ></i>
               </div>
             </div>
           </div>
